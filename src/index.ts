@@ -6,15 +6,15 @@ import { logger } from "hono/logger";
 import { createOpenApiDocument } from "hono-zod-openapi";
 import { swaggerUI } from "@hono/swagger-ui";
 import { Scalar } from "@scalar/hono-api-reference";
+import { serveStatic } from "@hono/node-server/serve-static";
+import { staticOptions } from "./static-options.js";
 
 const app = new Hono();
 
-app.use(logger());
-app.route("/books", bookRoutes);
+app.use("/*", serveStatic(staticOptions));
 
-app.get("/", (c) => {
-  return c.text("Hono Rest API Service");
-});
+app.use(logger());
+app.route("/api/books", bookRoutes);
 
 createOpenApiDocument(
   app,
@@ -24,10 +24,10 @@ createOpenApiDocument(
       version: "1.0.0",
     },
   },
-  { routeName: "/doc" },
+  { routeName: "/api/doc" },
 );
 
 // Render the OpenAPI document through Swagger UI
-app.get("/swagger", swaggerUI({ url: "/doc" }));
-app.get("/scalar", Scalar({ url: "/doc" }));
+app.get("/api/swagger", swaggerUI({ url: "/api/doc" }));
+app.get("/api/scalar", Scalar({ url: "/api/doc" }));
 serve(app);
