@@ -10,9 +10,9 @@ import { Scalar } from "@scalar/hono-api-reference";
 const app = new Hono();
 
 app.use(logger());
-app.route("/books", bookRoutes);
+app.route("/api/books", bookRoutes);
 
-app.get("/", (c) => {
+app.get("/api", (c) => {
   return c.text("Hono Rest API Service");
 });
 
@@ -24,10 +24,10 @@ createOpenApiDocument(
       version: "1.0.0",
     },
   },
-  { routeName: "/doc" },
+  { routeName: "/api/doc" },
 );
 
 // Render the OpenAPI document through Swagger UI
-app.get("/swagger", swaggerUI({ url: "/doc" }));
-app.get("/scalar", Scalar({ url: "/doc" }));
+app.get("/api/swagger", swaggerUI({ url: "/api/doc" }));
+app.get("/api/scalar", Scalar({ url: "/api/doc" }));
 serve(app);
