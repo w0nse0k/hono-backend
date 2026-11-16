@@ -7,9 +7,9 @@ import { logger } from "hono/logger";
 const app = new Hono();
 
 app.use(logger());
-app.route("/books", bookRoutes);
+app.route("/api/books", bookRoutes);
 
-app.get("/", (c) => {
+app.get("/api", (c) => {
   return c.text("Hono Rest API Service");
 });
 
