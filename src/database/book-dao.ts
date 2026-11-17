@@ -11,11 +11,11 @@ export async function listBooks(size: number, page: number) {
 
 /** 책 1권 */
 export async function getBook(id: number) {
-  return await db.one<Book>("select * from book where id=?", id);
+  return await db.one<Book>("select * from book where id=?", [id]);
 }
 
 /** 책 추가 */
-export async function addBook(book: Book) {
+export async function addBook(book: Partial<Book>) {
   return await db.upsert(
     "insert book(title, price, description, image) values (?,?,?,?)",
     [book.title, book.price, book.description, book.image],
