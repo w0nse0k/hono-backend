@@ -6,11 +6,10 @@ import {
   listBooks,
   updateBook,
 } from "../database/book-dao.js";
-import { BookSchema, type Book } from "../types/book.js";
+import { BookSchema } from "../types/book.js";
 import { HTTPException } from "hono/http-exception";
 import { openApi } from "hono-zod-openapi";
-import { z } from "zod";
-import { IDSchema, UpsertSchema } from "../types/common.js";
+import { IDSchema, PageSchema, UpsertSchema } from "../types/common.js";
 
 const bookRoutes = new Hono();
 
@@ -22,12 +21,7 @@ bookRoutes.get(
   openApi({
     tags: ["Books"],
     summary: "책 목록",
-    request: {
-      query: z.object({
-        size: z.coerce.number().default(10),
-        page: z.coerce.number().default(1),
-      }),
-    },
+    request: { query: PageSchema },
     responses: { 200: BookSchema.array() },
   }),
   async (c) => {
@@ -65,7 +59,7 @@ bookRoutes.post(
     responses: { 200: UpsertSchema },
   }),
   async (c) => {
-    const book: Book = await c.req.json();
+    const book = await c.req.valid("json");
     const result = await addBook(book);
     return c.var.res(result);
   },
