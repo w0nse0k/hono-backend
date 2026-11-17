@@ -14,7 +14,7 @@ export default {
   },
 
   /** 1개 가져오기 */
-  one: async <T>(sql: string, ...args: unknown[]) => {
+  one: async <T>(sql: string, args: unknown[]) => {
     let conn;
     try {
       conn = await pool.getConnection();
