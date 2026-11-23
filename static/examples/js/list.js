@@ -1,9 +1,6 @@
 const API_SERVER = "http://localhost:3000/api";
 const listElement = document.querySelector("#list");
-let page = 0;
-
-// 초기 목록
-fetchBooks();
+let page = 1;
 
 // 더보기 버튼 이벤트
 document.querySelector("#more").addEventListener("click", fetchBooks);
@@ -17,6 +14,5 @@ export async function fetchBooks() {
         `<li>${book.id}. ${book.title} / ${book.price.toLocaleString()}원</li>`,
     )
     .join("");
-  console.log(booksHtml);
   listElement.insertAdjacentHTML("beforeend", booksHtml);
 }
